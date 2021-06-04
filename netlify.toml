@@ -1,0 +1,17 @@
+[build]
+  command = "npm i && cd api && npm i && cd ../web-react && npm i && cd .. && npm run build && cp api/build/graphql-schema.js api/build/functions/graphql/. && cp api/build/schema.graphql api/build/functions/graphql/.  && cd api/src/functions/graphql && npm i"
+  publish = "web-react/build"
+  functions = "api/build/functions"
+
+[dev]
+  command = "npm start"
+
+[template.environment]
+  NEO4J_URI = "neo4j+s://365a1b4b.databases.neo4j.io:7687"
+  NEO4J_USER = "neo4j"
+  NEO4J_PASSWORD = "YEmfsjJXX_WsCTh9WCbR6V1EIlHmUQuaKxL8xRTcU4M"
+  
+[[redirects]]
+  from = "/graphql"
+  to = "/.netlify/functions/graphql"
+  status = 200

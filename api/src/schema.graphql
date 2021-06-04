@@ -1,0 +1,43 @@
+scalar Point
+scalar DateTime
+scalar PointInput
+
+type User {
+  ID: Int
+  username: String
+  State: String
+  Informations: [Information] @relationship(type: "PROVIDE", direction: OUT)
+}
+
+type Information {
+  infoID: Int
+  State: String
+  condition: String
+  weather: String
+  users: [User] @relationship(type: "PROVIDE", direction: IN)
+}
+
+type PreviousData {
+  Date: String
+  State: String
+  Type: String
+  Latitude: Int
+  Longitude: Int
+}
+type DisasterCount @exclude {
+  State: String
+  count: Int
+}
+
+type Query {
+  userCount: Int! @cypher(statement: "MATCH (u:User) RETURN COUNT(u)")
+  disasterCounts: [DisasterCount]
+    @cypher(
+      statement: """
+      MATCH (pd:PreviousData)
+      WITH pd.State AS State,pd.Type AS Type, COUNT(*) AS count ORDER BY Type
+      WHERE Type = Type
+      RETURN {State: State, count: count} AS obj
+      """
+    )
+}
